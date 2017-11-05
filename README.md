@@ -65,81 +65,51 @@ The mongocrypt functions are based on the MongoDB SDK functions. The structure i
         // have a look at the Installation & Setup section
  }
 ```
+**Standard usage:**
 
-**Equivalents**:
+The MongoDB JS SDK function compared with the mongocrypt function
+* With MongoDB's SDK: `db.collection(collection).function(parameter, callback(err, res))`
+* With Mongocrypt: `db.collection(collection).function(parameter).then(err)`
+
+
+The parameters of the mongocrypt functions are identical to the common SDK ones. You can find a list of them [here](https://www.w3schools.com/nodejs/nodejs_mongodb.asp). This principle works for all mongocrypt functions except `find()` and `findOne()`
 ```javascript
-// Example values
-let query = { username: "eykjs" }
-let arrayOfObjects = [{ username: "eykjs" }, {username: "elonmusk" }]
-let newobject = {$set: {twitter: "eykjs"}}
-let filter = { _id: false } 
-let sort = { money: 1 } // asc sort
-let options = {sort: sort, filter: filter}
+// Example how to use find() and findOne()
 
-/* INSERT AND UPDATE */
-
-
-// mongodb.db.collection( collection ).insertOne(object, function(err, res))
- mongocrypt.db.collection(collection).insertOne(object).then(err => {
-    if(!err) console.log("Success!");
-    if(err) console.log("Error:" + err);
- })
-
-// mongodb.db.collection( collection ).insertMany(arrayOfObjects, function(err, res))
- mongocrypt.db.collection(collection).insertMany(arrayOfObjects).then(err => {
-    if(!err) console.log("Success!");
-    if(err) console.log("Error:" + err);
- });
-
-// mongodb.db.collection( collection ).updateOne(query, newobject, function(err, res))
- mongocrypt.db.collection(collection).updateOne(query, newobject).then(err => {
-    if(!err) console.log("Success!");
-    if(err) console.log("Error:" + err);
- });
-
-// mongodb.db.collection( collection ).updateMany(query, newobject, function(err, res))
- mongocrypt.db.collection(collection).updateMany(query, newobject).then(err => {
-    if(!err) console.log("Success!");
-    if(err) console.log("Error:" + err);
- });
-
-/* FIND */
-
-// mongodb.db.collection( collection ).findOne(query, filter, function(err, res))
-mongocrypt.db.collection( collection ).findOne(query, filter).then(res => {
+/* The option objects takes 3 parameters. The sort object a limit number and a filter object.
+ All 3 can also be null. 
+*/
+const query = {pro: true}
+const options = {sort: {rank: 1}, limit: 5, filter: {email: true}
+}
+const canAlsoBeOptions = null;
+mongocrypt.collection("users").find(query, options).then(res => {
     if(res){
-        console.log(res.email)
-    } else{ console.log("Error!") }
-});
-
-// mongodb.db.collection( collection ).find(query, filter, function(err, res)).sort(sortobj).limit(limit)
-mongocrypt.db.collection( collection ).find(query, options).then(res => {
-    if(res){
-        console.log(res.email)
-    }else { console.log("Error")}
-}):
-
-/* DELETE & DROP */
-
-// mongodb.db.collection( collection ).deleteOne(query, function(err, obj))
-mongocrypt.db.collection( collection ).deleteOne(query).then(err => {
-    if(!err) console.log("Success!");
-    if(err) console.log("Error:" + err);
+        console.log("Email: " + res[0].email)
+    } else {
+        console.log("An error appeared");
+    }
 })
 
-// mongodb.db.collection( collection ).deleteMany(query, function(err, obj))
-mongocrypt.db.collection( collection ).deleteMany(query).then(err => {
-    if(!err) console.log("Success!");
-    if(err) console.log("Error:" + err);
-});
-
-// mongo.db.collection( collection ).drop(function(err, delOK))
-mongocrypt.db.collection( collection ).drop().then(err => {
-    if(!err) console.log("Success!");
-    if(err) console.log("Error:" + err);
-});
+// findOne() works on a similar way but it only takes a filter as second parameter
+mongocrypt.collection("users").findOne(query, {email: true}).then(res => {})
 ```
-**Note:** Every function except find() and findOne() can be executed without a callback (.then()) function.
+
+## List of all Functions
+
+* `mongocrypt.encryption.setKey(key)`
+* `mongocrypt.db.connect(url).then(err)`
+* `mongocrypt.db.isConnected()` *returns true or false*
+* `mongocrypt.db.close()`
+* `mongocrypt.db.collection(collection).insertOne(object).then(err)`
+* `mongocrypt.db.collection(collection).insertMany(array).then(err)`
+* `mongocrypt.db.collection(collection).updateOne(query, object).then(err)`
+* `mongocrypt.db.collection(collection).updateMany(query, object).then(err)`
+* `mongocrypt.db.collection(collection).findOne(query, filter).then(res)`
+* `mongocrypt.db.collection(collection).find(query, options).then(res)` *options descripted above*
+* `mongocrypt.db.collection(collection).deleteOne(query).then(err)`
+* `mongocrypt.db.collection(collection).deleteMany(query).then(err)`
+* `mongocrypt.db.collection(collection).drop(query).then(err)`
 
 ## Common errors / FAQ
 
@@ -156,3 +126,6 @@ mongocrypt.db.collection( collection ).drop().then(err => {
 
 
 Do not hesitate to open an issue or send me a message on [Twitter](https://www.twitter.com/eykjs)
+
+
+
