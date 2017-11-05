@@ -1,0 +1,28 @@
+{
+  "name": "mongocrypt",
+  "version": "1.0.0",
+  "description": "Encrypt, store and recieve data from MongoDB with almost native functions",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "npm install mongodb --save"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eykjs/mongocrypt.git"
+  },
+  "keywords": [
+    "encryption",
+    "aes",
+    "mongodb",
+    "nodejs"
+  ],
+  "author": "Eyk Rehbein (https://twitter.com/eykjs)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/eykjs/mongocrypt/issues"
+  },
+  "homepage": "https://github.com/eykjs/mongocrypt#readme",
+  "dependencies": {
+    "mongodb": "^2.2.33"
+  }
+}
