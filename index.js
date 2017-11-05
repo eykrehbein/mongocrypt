@@ -351,7 +351,7 @@ function encryptData(value, key) {
             crypted += cipher.final('hex');
             return crypted;
         } else {
-            errorMessage("insert/update", "the key have to have to length of 32 characters. The database values were filled with null");
+            errorMessage("insert/update", "the key has to have length of 32 characters. The database values were filled with null");
             return null;
         }
     } catch (e) {
@@ -370,7 +370,7 @@ function decryptData(value, key) {
             dec += decipher.final('utf8');
             return dec;
         } else {
-            errorMessage("find", "the key have to have to length of 32 characters.");
+            errorMessage("find", "the key has to have of 32 characters.");
             return null;
         }
     } catch (e) {

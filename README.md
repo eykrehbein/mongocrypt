@@ -151,7 +151,7 @@ mongocrypt.db.collection( collection ).drop().then(err => {
  * Solution: Set an encryption key first with encryption.setKey(key)
 
  ---
- * __Error:__ `the key have to have to length of 32 characters.`
+ * __Error:__ `the key has to have a length of 32 characters.`
  * Solution: You can only set a string as encryption key with the length of 32 characters.
 
 
