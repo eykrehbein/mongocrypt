@@ -37,13 +37,12 @@ exports.db = {
         _db = this._db;
         let insertOne = (object) => {
             if (_key != null) {
-                let key = _key;
                 // check if the insert value is an object
                 if (typeof object === 'object') {
                     // check if the connection to the database != null
                     if (this._db != null) {
                         // encrypt each entry of the object
-                        encryptEach(object, key);
+                        encryptEach(object);
                         // insert object
                         return new Promise((resolve, reject) => {
                             this._db.collection(collection).insertOne(object, (err, res) => {
@@ -63,11 +62,10 @@ exports.db = {
         }
         let insertMany = (array) => {
             if (_key != null) {
-                let key = _key;
                 if (this._db != null) {
                     // encrypt each entry of the list
                     for (let l in array) {
-                        encryptEach(array[l], key);
+                        encryptEach(array[l]);
                     }
                     // insert array
                     return new Promise((resolve, reject) => {
@@ -86,11 +84,10 @@ exports.db = {
         }
         let updateOne = (query, newdata) => {
             if (_key != null) {
-                let key = _key;
                 if (typeof query === 'object' && typeof newdata === 'object') {
                     if (this._db != null) {
-                        encryptEach(query, key);
-                        encryptEach(newdata, key);
+                        encryptEach(query);
+                        encryptEach(newdata);
                         return new Promise((resolve, reject) => {
                             this._db.collection(collection).updateOne(query, newdata, (err, res) => {
                                 if (err) resolve(err);
@@ -109,11 +106,10 @@ exports.db = {
         }
         let updateMany = (query, newdata) => {
             if (_key != null) {
-                let key = _key;
                 if (typeof query === 'object' && typeof newdata === 'object') {
                     if (this._db != null) {
-                        encryptEach(query, key);
-                        encryptEach(newdata, key);
+                        encryptEach(query);
+                        encryptEach(newdata);
                         return new Promise((resolve, reject) => {
                             this._db.collection(collection).updateMany(query, newdata, (err, res) => {
                                 if (err) resolve(err);
@@ -132,14 +128,13 @@ exports.db = {
         }
         let findOne = (query, filter) => {
             if (_key != null) {
-                let key = _key;
                 if (typeof query === 'object' && typeof filter === 'object') {
                     if (this._db != null) {
-                        encryptEach(query, key);
+                        encryptEach(query);
                         return new Promise((resolve, reject) => {
                             this._db.collection(collection).findOne(query, filter, (err, res) => {
                                 if (!err) {
-                                    decryptEach(res, key);
+                                    decryptEach(res);
                                     resolve(res);
                                 }else{
                                     // returns false on an error
@@ -159,12 +154,11 @@ exports.db = {
         }
         let find = (query, options) => {
             if (_key != null) {
-                let key = _key;
                 if (typeof query === 'object') {
                     if (typeof options === 'object' || options == null) {
                         if (this._db != null) {
                             // encrypt the query because the database data is encrypted too
-                            encryptEach(query, key);
+                            encryptEach(query);
                             // set options to an empty array if it's not a param
                             if (options == null) {
                                 options = {}
@@ -183,7 +177,7 @@ exports.db = {
                                     this._db.collection(collection).find(query, options.filter).limit(options.limit).toArray((err, res) => {
                                         if (!err) {
                                             for (l in res) {
-                                                decryptEach(res[l], key);
+                                                decryptEach(res[l]);
                                             }
                                             resolve(res);
                                         }else{
@@ -198,7 +192,7 @@ exports.db = {
                                         this._db.collection(collection).find(query, options.filter).sort(options.sort).limit(options.limit).toArray((err, res) => {
                                             if (!err) {
                                                 for (l in res) {
-                                                    decryptEach(res[l], key);
+                                                    decryptEach(res[l]);
                                                 }
                                                 resolve(res);
                                             }else{
@@ -226,11 +220,9 @@ exports.db = {
         }
         let deleteOne = (query) => {
             if (_key != null) {
-                let key = _key;
-
                 if (typeof query === 'object') {
                     if (this._db != null) {
-                        encryptEach(query, key);
+                        encryptEach(query);
                         return new Promise((resolve, reject) => {
                             this._db.collection(collection).deleteOne(query, (err, obj) => {
                                 if (err) resolve(err);
@@ -249,11 +241,9 @@ exports.db = {
         }
         let deleteMany = (query) => {
             if (_key != null) {
-                let key = _key;
-
                 if (typeof query === 'object') {
                     if (this._db != null) {
-                        encryptEach(query, key);
+                        encryptEach(query);
                         return new Promise((resolve, reject) => {
                             this._db.collection(collection).deleteMany(query, (err, obj) => {
                                 if (err) resolve(err);
@@ -316,37 +306,37 @@ function isObjectID(value) {
     }
 }
 
-function encryptEach(obj, key) {
+function encryptEach(obj) {
     // function to encrypt objects recursive
     for (let k in obj) {
         if (typeof obj[k] === 'object') {
-            encryptEach(obj[k], key);
+            encryptEach(obj[k]);
         }
         if (typeof obj[k] !== 'object') {
-            obj[k] = encryptData(obj[k], key);
+            obj[k] = encryptData(obj[k]);
         }
     }
 }
 
-function decryptEach(obj, key) {
+function decryptEach(obj) {
     // function to decrypt objects recursive
     for (l in obj) {
         var is = isObjectID(obj[l]);
         if (typeof obj[l] !== 'object') {
-            obj[l] = decryptData(obj[l], key);
+            obj[l] = decryptData(obj[l]);
         }
         if (typeof obj[l] === 'object' && !is) {
-            decryptEach(obj[l], key);
+            decryptEach(obj[l]);
         }
     }
 }
 
-function encryptData(value, key) {
+function encryptData(value) {
     // function to encrypt one value
     // need to use encryption without an initialization vector because updating values would take too long with it
     try {
-        if (key != null && key.length == 32) {
-            let cipher = crypto.createCipher(_default_algorithm, key)
+        if (_key != null && _key.length == 32) {
+            let cipher = crypto.createCipher(_default_algorithm, _key)
             let crypted = cipher.update(value.toString(), 'utf8', 'hex')
             crypted += cipher.final('hex');
             return crypted;
@@ -361,11 +351,11 @@ function encryptData(value, key) {
 
 }
 
-function decryptData(value, key) {
+function decryptData(value) {
     // function to decrypt one value
     try {
-        if (key != null && key.length == 32) {
-            let decipher = crypto.createDecipher(_default_algorithm, key)
+        if (_key != null && _key.length == 32) {
+            let decipher = crypto.createDecipher(_default_algorithm, _key)
             let dec = decipher.update(value.toString(), 'hex', 'utf8')
             dec += decipher.final('utf8');
             return dec;
