@@ -51,7 +51,7 @@ mongocrypt.db.connect(url).then(err => {
 });
 ```
 **Everyone**
-is invited to fork this project and work on it. If you create a pull request and your code is good and usefull for this project, it will be merged into mongocrypt. Collaborators are also searched. For future plans have a look at [Trello](https://trello.com/b/SCrW8gsN)
+is invited to fork this project and work on it. If you create a pull request and your code is good and useful for this project, it will be merged into mongocrypt. Collaborators are also searched. For future plans have a look at [Trello](https://trello.com/b/SCrW8gsN)
 ## Usage
 
 The mongocrypt functions are based on the MongoDB SDK functions. The structure is always the same. You can see each equivalent in the list below.
