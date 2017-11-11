@@ -1,6 +1,6 @@
 {
   "name": "mongocrypt",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Encrypt, store and recieve data from MongoDB with almost native functions",
   "main": "index.js",
   "scripts": {
