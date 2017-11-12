@@ -4,7 +4,6 @@
   "description": "Encrypt, store and recieve data from MongoDB with almost native functions",
   "main": "index.js",
   "scripts": {
-    "postinstall": "npm install mongodb --save"
   },
   "repository": {
     "type": "git",
